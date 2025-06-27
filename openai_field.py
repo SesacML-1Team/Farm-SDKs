@@ -8,7 +8,7 @@ def openai_field(user_text):
     deployment = "gpt-4o"
     search_endpoint = "https://farm-sesacteam1-aisearch.search.windows.net"
     search_key = "put your Azure AI Search admin key here"
-    search_index = "farm-house-rag"
+    search_index = "house-toji-rag"
     subscription_key = "REPLACE_WITH_YOUR_KEY_VALUE_HERE"
 
     # 키 기반 인증을 사용하여 Azure OpenAI 클라이언트 초기화
@@ -51,7 +51,7 @@ def openai_field(user_text):
     completion = client.chat.completions.create(
         model=deployment,
         messages=messages,
-        max_tokens=1000,
+        max_tokens=1500,
         temperature=0.7,
         top_p=0.2,
         frequency_penalty=1,
@@ -64,16 +64,20 @@ def openai_field(user_text):
                 "parameters": {
                     "endpoint": f"{search_endpoint}",
                     "index_name": search_index,
-                    "semantic_configuration": "farm-house-rag-semantic-configuration",
-                    "query_type": "semantic",
+                    "semantic_configuration": "house-toji-rag-semantic-configuration",
+                    "query_type": "vector_semantic_hybrid",
                     "fields_mapping": {},
                     "in_scope": True,
                     "filter": None,
-                    "strictness": 5,
-                    "top_n_documents": 2,
+                    "strictness": 2,
+                    "top_n_documents": 5,
                     "authentication": {
                         "type": "api_key",
                         "key": f"{search_key}"
+                    },
+                    "embedding_dependency": {
+                        "type": "deployment_name",
+                        "deployment_name": "text-embedding-3-large"
                     }
                 }
             }]
